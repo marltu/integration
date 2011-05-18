@@ -5,27 +5,20 @@ e = 0.00000001
 
 def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
 
-    fi = lambda do |i|
-        case i
-        when 0 then f.call(a)
-        when n then f.call(b)
-        else f.call(a + i*(b-a)/n)
-        end
-    end
+    fi = lambda { |i| f.call(a + i*(b-a)/n) }
 
-    sn = fi.call(0) + fi.call(n)
-    sn += 4 * (1 .. n-1).step(2).collect { |i| fi.call(i) }.inject { |sum, y| sum += y }
-    sn += 2 * (2 .. n-2).step(2).collect { |i| fi.call(i) }.inject { |sum, y| sum += y }
-    sn = sn * (b - a)/(3*n)
+    sum_collect = lambda { |interval| interval.step(2).collect { |i| fi.call(i) }.inject { |sum, y| sum + y } }
+
+    sn = (b - a) / (3*n) * (f.call(a) + 4 * sum_collect.call( (1 .. n-1) ) + 2 * sum_collect.call( (2 .. n-2) ) + f.call(b))
 
     diff = (sn - sn2).abs / (2 ** 3 - 1)
 
     print "n = #{n}; Sn = #{sn} diff: #{diff}\n"
 
     if (diff > e)
-        return simpson(f, a, b, e, n * 2, sn)
+        simpson(f, a, b, e, n * 2, sn)
     else
-        return sn
+        sn
     end
 end
 
