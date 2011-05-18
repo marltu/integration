@@ -6,12 +6,10 @@ e = 0.00000001
 def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
 
     fi = lambda do |i|
-        if i == 0
-            return f.call(a)
-        elsif i == n
-            return f.call(b)
-        else
-            return f.call(a + i*(b-a)/n)
+        case i
+        when 0 then f.call(a)
+        when n then f.call(b)
+        else f.call(a + i*(b-a)/n)
         end
     end
 
@@ -26,6 +24,8 @@ def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
 
     if (diff > e)
         return simpson(f, a, b, e, n * 2, sn)
+    else
+        return sn
     end
 end
 
