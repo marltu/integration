@@ -7,9 +7,16 @@ def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
 
     fi = lambda { |i| f.call(a + i*(b-a)/n) }
 
-    sum_collect = lambda { |interval| interval.step(2).collect { |i| fi.call(i) }.inject { |sum, y| sum + y } }
+    sum_collect = lambda do |interval| 
+        interval.step(2).collect { |i| fi.call(i) }.inject { |s, y| s + y } 
+    end
 
-    sn = (b - a) / (3*n) * (f.call(a) + 4 * sum_collect.call( (1 .. n-1) ) + 2 * sum_collect.call( (2 .. n-2) ) + f.call(b))
+    sn = (b - a) / (3*n) * (
+        f.call(a) + 
+        4 * sum_collect.call( (1 .. n-1) ) + 
+        2 * sum_collect.call( (2 .. n-2) ) + 
+        f.call(b)
+    )
 
     diff = (sn - sn2).abs / (2 ** 3 - 1)
 
