@@ -35,9 +35,6 @@ def gauss3(f, a, b)
 end
 
 def x_transform(a, b, s)
-    alpha = (b + a).fdiv(2)
-    beta = (b - a).fdiv(2)
-
     return (b - a).fdiv(2) * s + (a + b).fdiv(2)
 end
 
