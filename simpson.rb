@@ -3,7 +3,7 @@ a = 0.0
 b = Math::PI/3
 e = 0.00000001
 
-def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
+def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0, diff = 1.0/0)
 
     fi = lambda { |i| f.call(a + i*(b-a)/n) }
 
@@ -18,12 +18,12 @@ def simpson(f, a, b, e = 0.001, n = 10, sn2 = 1.0/0)
         f.call(b)
     )
 
-    diff = (sn - sn2).abs / (2 ** 3 - 1)
+    diff1 = (sn - sn2).abs / (2 ** 3 - 1)
 
-    print "n = #{n}; Sn = #{sn} diff: #{diff}\n"
+    print "n = #{n}; Sn = #{sn} diff: #{diff1} ddiff #{diff/diff1}\n"
 
     if (diff > e)
-        simpson(f, a, b, e, n * 2, sn)
+        simpson(f, a, b, e, n * 2, sn, diff1)
     else
         sn
     end

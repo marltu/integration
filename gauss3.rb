@@ -1,19 +1,20 @@
 f = lambda { |x| Math.sin(3*x) }
 a = 0.0
 b = Math::PI/3
-e = 0.00000001
+e = 0.0000000000001
 
 
-def gauss3_solve(f, a, b, e, m = 2, sm2 = 1.0/0)
+def gauss3_solve(f, a, b, e, m = 2, sm2 = 1.0/0, diff = 1.0/0)
     xi = lambda { |i| a + i * (b - a)/m } 
     sm = 0.upto(m - 1).collect { |i| gauss3(f, xi.call(i), xi.call(i+1)) }.inject {|s, si| s + si}
 
-    diff = (sm2 - sm).abs / (2 ** (2 * 3) - 1)
 
-    print "m = #{m}; Sm = #{sm} diff: #{diff}\n"
+    diff1 = (sm2 - sm).abs / (2 ** (2 * 3) - 1)
 
-    if diff > e
-        gauss3_solve(f, a, b, e, m * 2, sm)
+    print "m = #{m}; Sm = #{sm} diff: #{diff1} deltadiff: #{diff/diff1}\n"
+
+    if diff1 > e
+        gauss3_solve(f, a, b, e, m * 2, sm, diff1)
     else
         return sm  
     end
